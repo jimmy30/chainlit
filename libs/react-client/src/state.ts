@@ -7,6 +7,7 @@ import {
   IAction,
   IAsk,
   ICallFn,
+  IDatalayerElement,
   IMessageElement,
   IStep,
   ITasklistElement,
@@ -109,6 +110,11 @@ export const elementState = atom<IMessageElement[]>({
 
 export const tasklistState = atom<ITasklistElement[]>({
   key: 'TasklistElements',
+  default: []
+});
+
+export const datalayerState = atom<IDatalayerElement[]>({
+  key: 'DatalayerElements',
   default: []
 });
 

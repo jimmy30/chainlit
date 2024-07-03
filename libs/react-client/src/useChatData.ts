@@ -6,6 +6,7 @@ import {
   chatSettingsDefaultValueSelector,
   chatSettingsInputsState,
   chatSettingsValueState,
+  datalayerState,
   elementState,
   loadingState,
   sessionState,
@@ -23,6 +24,7 @@ const useChatData = () => {
   const loading = useRecoilValue(loadingState);
   const elements = useRecoilValue(elementState);
   const tasklists = useRecoilValue(tasklistState);
+  const datalayers = useRecoilValue(datalayerState);
   const actions = useRecoilValue(actionState);
   const session = useRecoilValue(sessionState);
   const askUser = useRecoilValue(askUserState);
@@ -50,7 +52,8 @@ const useChatData = () => {
     elements,
     error: session?.error,
     loading,
-    tasklists
+    tasklists,
+    datalayers
   };
 };
 

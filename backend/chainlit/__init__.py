@@ -28,6 +28,8 @@ from chainlit.config import config
 from chainlit.context import context
 from chainlit.element import (
     Audio,
+    Data,
+    DataLayer,
     File,
     Image,
     Pdf,
@@ -380,6 +382,8 @@ __all__ = [
     "File",
     "Task",
     "TaskList",
+    "Data",
+    "DataLayer",
     "TaskStatus",
     "Video",
     "ChatSettings",

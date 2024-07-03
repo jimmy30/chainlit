@@ -3,6 +3,7 @@ export type IElement =
   | ITextElement
   | IPdfElement
   | ITasklistElement
+  | IDatalayerElement
   | IAudioElement
   | IVideoElement
   | IFileElement
@@ -69,3 +70,5 @@ export interface IFileElement extends TMessageElement<'file'> {
 export interface IPlotlyElement extends TMessageElement<'plotly'> {}
 
 export interface ITasklistElement extends TElement<'tasklist'> {}
+
+export interface IDatalayerElement extends TElement<'datalayer'> {}

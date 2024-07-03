@@ -7,6 +7,7 @@ import {
   chatSettingsInputsState,
   chatSettingsValueState,
   currentThreadIdState,
+  datalayerState,
   elementState,
   firstUserInteraction,
   loadingState,
@@ -38,6 +39,7 @@ const useChatInteract = () => {
   const setMessages = useSetRecoilState(messagesState);
   const setElements = useSetRecoilState(elementState);
   const setTasklists = useSetRecoilState(tasklistState);
+  const setDataLayers = useSetRecoilState(datalayerState);
   const setActions = useSetRecoilState(actionState);
   const setTokenCount = useSetRecoilState(tokenCountState);
   const setIdToResume = useSetRecoilState(threadIdToResumeState);
@@ -53,6 +55,7 @@ const useChatInteract = () => {
     setMessages([]);
     setElements([]);
     setTasklists([]);
+    setDataLayers([]);
     setActions([]);
     setTokenCount(0);
     resetChatSettings();
@@ -119,6 +122,13 @@ const useChatInteract = () => {
     session?.socket.emit('stop');
   }, [session?.socket]);
 
+  const removeDataLayer = useCallback(
+    (id) => {
+      session?.socket.emit('remove_datalayer', { id: id });
+    },
+    [session?.socket]
+  );
+
   const callAction = useCallback(
     (action: IAction) => {
       const socket = session?.socket;
@@ -165,6 +175,7 @@ const useChatInteract = () => {
     sendAudioChunk,
     endAudioStream,
     stopTask,
+    removeDataLayer,
     setIdToResume,
     updateChatSettings
   };

@@ -4,8 +4,11 @@ import { useRecoilValue } from 'recoil';
 
 import { Alert, Box, Stack } from '@mui/material';
 
+import { useChatInteract } from '@chainlit/react-client';
+
 import { ElementSideView } from 'components/atoms/elements';
 import { Translator } from 'components/i18n';
+import { DataLayer } from 'components/molecules/datalayer/DataLayer';
 import { TaskList } from 'components/molecules/tasklist/TaskList';
 import { Header } from 'components/organisms/header';
 import { SideBar } from 'components/organisms/sidebar';
@@ -24,6 +27,7 @@ const Page = ({ children }: Props) => {
   const projectSettings = useRecoilValue(projectSettingsState);
   const userEnv = useRecoilValue(userEnvState);
   const sideViewElement = useRecoilValue(sideViewState);
+  const { removeDataLayer } = useChatInteract();
 
   if (projectSettings?.userEnv) {
     for (const key of projectSettings.userEnv || []) {
@@ -57,6 +61,12 @@ const Page = ({ children }: Props) => {
             </Stack>
           </Stack>
           {sideViewElement ? null : <TaskList isMobile={false} />}
+          {sideViewElement ? null : (
+            <DataLayer
+              isMobile={false}
+              handleClick={(id) => removeDataLayer(id)}
+            />
+          )}
           <ElementSideView />
         </Stack>
       )}

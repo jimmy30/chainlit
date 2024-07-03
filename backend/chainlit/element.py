@@ -17,11 +17,12 @@ from syncer import asyncio
 mime_types = {
     "text": "text/plain",
     "tasklist": "application/json",
+    "datalayer": "application/json",
     "plotly": "application/json",
 }
 
 ElementType = Literal[
-    "image", "text", "pdf", "tasklist", "audio", "video", "file", "plotly"
+    "image", "text", "pdf", "tasklist", "datalayer", "audio", "video", "file", "plotly"
 ]
 ElementDisplay = Literal["inline", "side", "page"]
 ElementSize = Literal["small", "medium", "large"]
@@ -296,6 +297,71 @@ class TaskList(Element):
             {
                 "status": self.status,
                 "tasks": tasks,
+            },
+            indent=4,
+            ensure_ascii=False,
+        )
+
+
+@dataclass
+class Data:
+    title: str
+    status: TaskStatus = TaskStatus.READY
+    value: Optional[str] = None
+    forId: Optional[str] = None
+
+    def __init__(
+        self,
+        title: str,
+        status: TaskStatus = TaskStatus.READY,
+        value: Optional[str] = None,
+        forId: Optional[str] = None,
+    ):
+        self.title = title
+        self.status = status
+        self.value = value
+        self.forId = forId
+
+
+@dataclass
+class DataLayer(Element):
+    type: ClassVar[ElementType] = "datalayer"
+    dataset: List[Data] = Field(default_factory=list, exclude=True)
+    status: str = "Ready"
+    name: str = "datalayer"
+    content: str = "dummy content to pass validation"
+
+    def __post_init__(self) -> None:
+        super().__post_init__()
+        self.updatable = True
+
+    async def add_data(self, data: Data):
+        self.dataset.append(data)
+
+    async def update(self):
+        await self.send()
+
+    async def send(self):
+        await self.preprocess_content()
+        await super().send(for_id="")
+
+    async def preprocess_content(self):
+        # serialize enum
+        dataset = [
+            {
+                "title": data.title,
+                "status": data.status.value,
+                "value": data.value,
+                "forId": data.forId,
+            }
+            for data in self.dataset
+        ]
+
+        # store stringified json in content so that it's correctly stored in the database
+        self.content = json.dumps(
+            {
+                "status": self.status,
+                "dataset": dataset,
             },
             indent=4,
             ensure_ascii=False,

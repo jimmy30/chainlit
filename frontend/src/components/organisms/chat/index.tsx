@@ -19,6 +19,7 @@ import {
 import { ErrorBoundary } from 'components/atoms/ErrorBoundary';
 import { Translator } from 'components/i18n';
 import { useTranslation } from 'components/i18n/Translator';
+import { DataLayer } from 'components/molecules/datalayer/DataLayer';
 import ScrollContainer from 'components/molecules/messages/ScrollContainer';
 import { TaskList } from 'components/molecules/tasklist/TaskList';
 
@@ -44,7 +45,7 @@ const Chat = () => {
 
   const [autoScroll, setAutoScroll] = useState(true);
   const { error, disabled } = useChatData();
-  const { uploadFile } = useChatInteract();
+  const { removeDataLayer, uploadFile } = useChatInteract();
   const uploadFileRef = useRef(uploadFile);
   const navigate = useNavigate();
 
@@ -232,6 +233,10 @@ const Chat = () => {
           </Box>
         ) : null}
         <TaskList isMobile={true} />
+        <DataLayer
+          isMobile={true}
+          handleClick={(id: string) => removeDataLayer(id)}
+        />
         <ErrorBoundary>
           <ScrollContainer
             autoScroll={autoScroll}

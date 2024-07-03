@@ -23,6 +23,14 @@
           "error": "An error occured"
         }
       },
+      "datalayer": {
+        "DataLayer": {
+            "title": "🗒️ Data Layer",
+            "loading": "Loading...",
+            "delete":"Remove Data",
+            "error": "An error occured"
+        }
+    },
       "attachments": {
         "cancelUpload": "Cancel upload",
         "removeAttachment": "Remove attachment"

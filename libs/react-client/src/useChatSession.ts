@@ -15,6 +15,7 @@ import {
   chatSettingsInputsState,
   chatSettingsValueState,
   currentThreadIdState,
+  datalayerState,
   elementState,
   firstUserInteraction,
   loadingState,
@@ -27,6 +28,7 @@ import {
 } from 'src/state';
 import {
   IAction,
+  IDatalayerElement,
   IElement,
   IMessageElement,
   IStep,
@@ -57,6 +59,7 @@ const useChatSession = () => {
 
   const setElements = useSetRecoilState(elementState);
   const setTasklists = useSetRecoilState(tasklistState);
+  const setDataLayers = useSetRecoilState(datalayerState);
   const setActions = useSetRecoilState(actionState);
   const setChatSettingsInputs = useSetRecoilState(chatSettingsInputsState);
   const setTokenCount = useSetRecoilState(tokenCountState);
@@ -133,9 +136,14 @@ const useChatSession = () => {
         setTasklists(
           (elements as ITasklistElement[]).filter((e) => e.type === 'tasklist')
         );
+        setDataLayers(
+          (elements as IDatalayerElement[]).filter(
+            (e) => e.type === 'datalayer'
+          )
+        );
         setElements(
           (elements as IMessageElement[]).filter(
-            (e) => ['avatar', 'tasklist'].indexOf(e.type) === -1
+            (e) => ['avatar', 'tasklist', 'datalayer'].indexOf(e.type) === -1
           )
         );
       });
@@ -239,6 +247,15 @@ const useChatSession = () => {
               return [...old.slice(0, index), element, ...old.slice(index + 1)];
             }
           });
+        } else if (element.type === 'datalayer') {
+          setDataLayers((old) => {
+            const index = old.findIndex((e) => e.id === element.id);
+            if (index === -1) {
+              return [...old, element];
+            } else {
+              return [...old.slice(0, index), element, ...old.slice(index + 1)];
+            }
+          });
         } else {
           setElements((old) => {
             const index = old.findIndex((e) => e.id === element.id);
@@ -256,6 +273,9 @@ const useChatSession = () => {
           return old.filter((e) => e.id !== remove.id);
         });
         setTasklists((old) => {
+          return old.filter((e) => e.id !== remove.id);
+        });
+        setDataLayers((old) => {
           return old.filter((e) => e.id !== remove.id);
         });
       });
